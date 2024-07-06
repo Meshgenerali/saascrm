@@ -18,8 +18,16 @@
         @livewireStyles
     </head>
     <body>
-        <header>
-            <div class="containe mx-auto">header</div>
+        <header class="py-6">
+            <div class="container mx-auto flex justify-between bg-slate-950 text-white rounded-full p-2">
+                <div class="logo  py-4">
+                    <a href="/">{{ config('app.name', 'Laravel') }}</a>
+                </div>
+                <div class="nav flex">
+                    <a href="{{url('/login')}}" class="p-4 block">Login</a>
+                    <a href="{{ url('/register') }}" class="p-4 block bg-slate-500 rounded-full hover:bg-blue-700">Register</a>
+                </div>
+            </div>
         </header>
         <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
             {{ $slot }}
