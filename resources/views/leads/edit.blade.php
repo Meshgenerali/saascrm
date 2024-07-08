@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Create Leads') }}
+            {{ __('Update Leads') }}
         </h2>
     </x-slot>
 
@@ -13,11 +13,12 @@
                   </div>
         @endif
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-               <form action="{{route('leads.store')}}" method="post">
+               <form action="{{route('leads.update', ['lead' => $lead->id])}}" method="post">
                 @csrf
+                @method('PUT')
                 <div>
                 <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                <x-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ old('name') ?? $lead->name }}" required autofocus />
                 @if ($errors->has('name'))
                         <span class="text-red-500 text-sm">{{ $errors->first('name') }}</span>
                 @endif
@@ -25,7 +26,7 @@
 
                 <div class="mt-4">
                 <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                <x-input id="email" class="block mt-1 w-full" type="email" name="email" value="{{ old('email') ?? $lead->email }}" required />
                 @if ($errors->has('email'))
                         <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
                 @endif
@@ -33,7 +34,7 @@
 
                 <div class="mt-4">
                 <x-label for="phone" value="{{ __('Phone') }}" />
-                <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required  />
+                <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" value="{{ old('phone') ?? $lead->phone }}" required  />
                 @if ($errors->has('phone'))
                         <span class="text-red-500 text-sm">{{ $errors->first('phone') }}</span>
                 @endif
@@ -41,7 +42,7 @@
 
                 <div class="mt-4">
                 <x-label for="message" value="{{ __('Message') }}" />
-                <x-input id="message" class="block mt-1 w-full" type="text" name="message" :value="old('message')" required  />
+                <x-input id="message" class="block mt-1 w-full" type="text" name="message" value="{{ old('message') ?? $lead->message }}" required  />
                 @if ($errors->has('message'))
                         <span class="text-red-500 text-sm">{{ $errors->first('message') }}</span>
                 @endif
@@ -50,10 +51,16 @@
                 <div class="mt-4">
                 <x-label for="status" value="{{ __('Status') }}" />
                 <x-select id="status" class="block mt-1 w-full bg-black" type="text" name="status" :value="old('status')" required  >
-                <option>Select</option>
-                <option value="new">New</option>
-                <option value="contacted">Contacted</option>
-                <option value="converted">Converted</option>
+    
+                <option value="new" @if (old('status') == 'new' || $lead->status == 'new')
+                selected = 'selected'
+                @endif>New</option>
+                <option value="contacted" @if (old('status') == 'contacted' || $lead->status == 'contacted')
+                selected = 'selected'
+                @endif>Contacted</option>
+                <option value="converted" @if (old('status') == 'converted' || $lead->status == 'converted')
+                selected = 'selected'
+                @endif>Converted</option>
                 </x-select>
                 @if ($errors->has('status'))
                         <span class="text-red-500 text-sm">{{ $errors->first('status') }}</span>

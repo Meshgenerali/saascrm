@@ -13,7 +13,8 @@ class LeadController extends Controller
      */
     public function index()
     {
-        return view('leads.index');
+        $leads = Lead::paginate(10);
+        return view('leads.index', compact('leads'));
     }
 
     /**
@@ -27,9 +28,9 @@ class LeadController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Lead $lead)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = $request->validate([
             'name' => 'required|string',
             'email' =>'required|email|unique:leads,email',
             'phone' => 'nullable|string',
@@ -37,22 +38,9 @@ class LeadController extends Controller
             'status' => 'required|in:new,contacted,converted',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+         $lead->create($validator);
 
-       // dd($validator);
-
-        $lead = new Lead();
-
-        $lead->name = $request->name;
-        $lead->email = $request->email;
-        $lead->phone = $request->phone;
-        $lead->message = $request->message;
-        $lead->status = $request->status;
-        $lead->save();
-
-        return redirect()->back()->with('message', 'Lead added successfully');
+        return redirect()->route('leads.index')->with('message', 'Lead created successfully');
     }
 
     /**
@@ -68,7 +56,7 @@ class LeadController extends Controller
      */
     public function edit(Lead $lead)
     {
-        //
+        return view('leads.edit', compact('lead'));
     }
 
     /**
@@ -76,7 +64,17 @@ class LeadController extends Controller
      */
     public function update(Request $request, Lead $lead)
     {
-        //
+        $validator = $request->validate([
+            'name' => 'required|string',
+            'email' =>'required|email|unique:leads,email',
+            'phone' => 'nullable|string',
+            'message' => 'nullable|string',
+            'status' => 'required|in:new,contacted,converted',
+        ]);
+
+         $lead->update($validator);
+
+        return redirect()->route('leads.index')->with('message', 'Lead updated successfully.');
     }
 
     /**
@@ -84,6 +82,8 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
-        //
+        $lead->delete();
+
+        return redirect()->route('leads.index')->with('message', 'Lead deleted successfully.');
     }
 }
