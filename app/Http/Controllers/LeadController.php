@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lead;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class LeadController extends Controller
 {
+    public function welcome() {
+        
+        return view('welcome');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -66,7 +71,7 @@ class LeadController extends Controller
     {
         $validator = $request->validate([
             'name' => 'required|string',
-            'email' =>'required|email|unique:leads,email',
+            'email' =>'required|email',
             'phone' => 'nullable|string',
             'message' => 'nullable|string',
             'status' => 'required|in:new,contacted,converted',

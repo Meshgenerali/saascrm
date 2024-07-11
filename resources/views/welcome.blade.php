@@ -13,4 +13,6 @@
     </div>
   </section>
 
+  @livewire('plans-pricing')
+
 </x-guest-layout>

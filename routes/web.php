@@ -4,9 +4,7 @@ use App\Http\Controllers\LeadController;
 use App\Models\Lead;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LeadController::class, 'welcome']);
 
 Route::middleware([
     'auth:sanctum',
